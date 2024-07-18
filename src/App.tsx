@@ -45,14 +45,14 @@ function App() {
           <div>{counter_value ?? "Loading..."}</div>
         </div>
         <div className="Container">
-          <a
+          {/* <a
             onClick={() => {
               WebApp.showAlert("This is a test alert!");
             }}
             style={{ marginBottom: 10 }}
           >
             Show Alert
-          </a>
+          </a> */}
           {connected && (
             <a
               onClick={() => {
