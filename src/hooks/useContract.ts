@@ -56,8 +56,15 @@ export function useContract() {
         incrementBy: 3,
       });
     },
-    sendDeposite: () => {
-      return myContract?.sendDeploy(sender, toNano(0.1));
+    sendDeposite: (amount: number) => {
+      return myContract?.sendDeploy(sender, toNano(amount));
+    },
+    sendWithdrawal: (amount: number) => {
+      return myContract?.sendWithdrawalRequest(
+        sender,
+        toNano("0.01"),
+        toNano(amount)
+      );
     },
   };
 }

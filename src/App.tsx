@@ -13,6 +13,7 @@ function App() {
     // owner_address,
     sendIncrement,
     sendDeposite,
+    sendWithdrawal,
   } = useContract();
   const { connected } = useTonConnect();
   return (
@@ -28,8 +29,8 @@ function App() {
             {contract_address?.slice(0, 30) + "..."}
           </div>
           <b>Our contract Balance</b>
-          <div className="Hint">
-            {Number(fromNano(contract_balance)).toFixed(3)}
+          <div style={{ marginBottom: 10 }}>
+            {Number(fromNano(contract_balance)).toFixed(3)} TON
           </div>
         </div>
 
@@ -38,23 +39,42 @@ function App() {
           <div>{counter_value ?? "Loading..."}</div>
         </div>
         <div className="Container">
+          <a
+            onClick={() => {
+              WebApp.showAlert("This is a test alert!");
+            }}
+            style={{ marginBottom: 10 }}
+          >
+            Show Alert
+          </a>
           {connected && (
             <a
               onClick={() => {
                 sendIncrement();
               }}
-              style={{ marginBottom: 20 }}
+              style={{ marginBottom: 10 }}
             >
-              Increment
+              Increment by 3
             </a>
           )}
           {connected && (
             <a
               onClick={() => {
-                sendDeposite();
+                sendDeposite(1);
               }}
+              style={{ marginBottom: 10 }}
             >
-              Deposite
+              Request deposite of 1 TON
+            </a>
+          )}
+          {connected && (
+            <a
+              onClick={() => {
+                sendWithdrawal(0.5);
+              }}
+              style={{ marginBottom: 10 }}
+            >
+              Request 0.5 TON withdrawal
             </a>
           )}
         </div>
