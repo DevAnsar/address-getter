@@ -4,6 +4,7 @@ import { useContract } from "./hooks/useContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { fromNano } from "ton-core";
 import WebApp from "@twa-dev/sdk";
+import { useEffect } from "react";
 function App() {
   const {
     contract_address,
@@ -16,6 +17,11 @@ function App() {
     sendWithdrawal,
   } = useContract();
   const { connected } = useTonConnect();
+
+  useEffect(() => {
+    WebApp.expand();
+  }, []);
+
   return (
     <div className="Container">
       <div style={{ marginBottom: 20 }}>
@@ -39,14 +45,14 @@ function App() {
           <div>{counter_value ?? "Loading..."}</div>
         </div>
         <div className="Container">
-          {/* <a
+          <a
             onClick={() => {
               WebApp.showAlert("This is a test alert!");
             }}
             style={{ marginBottom: 10 }}
           >
             Show Alert
-          </a> */}
+          </a>
           {connected && (
             <a
               onClick={() => {
