@@ -19,7 +19,9 @@ function App() {
   const { connected } = useTonConnect();
 
   useEffect(() => {
-    WebApp.expand();
+    setInterval(() => {
+      WebApp.expand();
+    }, 3000);
   }, []);
 
   return (
