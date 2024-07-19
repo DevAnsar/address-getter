@@ -51,9 +51,9 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      if (!import.meta.env.PROD) {
-        lounchDevTools();
-      }
+      // if (!import.meta.env.PROD) {
+      lounchDevTools();
+      // }
       lounchTools();
       getUserData(WebApp.initData);
     }, 100);
