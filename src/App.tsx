@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     setInterval(() => {
       WebApp.expand();
-    }, 3000);
+    }, 500);
   }, []);
 
   return (
