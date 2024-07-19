@@ -4,8 +4,13 @@ import { useContract } from "./hooks/useContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { fromNano } from "ton-core";
 import WebApp from "@twa-dev/sdk";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import eruda from "eruda";
+import qs from "qs";
+import { ITelegramUser } from "./types/User";
+
 function App() {
+  const [tgUser, setTgUser] = useState<ITelegramUser | undefined>(undefined);
   const {
     contract_address,
     contract_balance,
@@ -18,14 +23,46 @@ function App() {
   } = useContract();
   const { connected } = useTonConnect();
 
-  useEffect(() => {
-    setInterval(() => {
+  const lounchTools = useCallback(() => {
+    if (!WebApp.isExpanded) {
       WebApp.expand();
-    }, 500);
+    }
+  }, []);
+
+  const lounchDevTools = useCallback(() => {
+    const el = document.getElementById("dev-console");
+    if (el) {
+      eruda.init({
+        container: el,
+      });
+    }
+  }, []);
+
+  const getUserData = useCallback((initData: string) => {
+    console.log("getUserData");
+    const mainData = qs.parse(initData);
+    if (mainData) {
+      const user = JSON.parse(mainData.user as string) as ITelegramUser;
+      if (user.username) {
+        setTgUser(user);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!import.meta.env.PROD) {
+        lounchDevTools();
+      }
+      lounchTools();
+      getUserData(WebApp.initData);
+    }, 100);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="Container">
+      <b style={{ marginBottom: 20 }}>{`Hi @${tgUser?.username}`}</b>
       <div style={{ marginBottom: 20 }}>
         <TonConnectButton />
       </div>
@@ -47,14 +84,14 @@ function App() {
           <div>{counter_value ?? "Loading..."}</div>
         </div>
         <div className="Container">
-          {/* <a
+          <a
             onClick={() => {
               WebApp.showAlert("This is a test alert!");
             }}
             style={{ marginBottom: 10 }}
           >
             Show Alert
-          </a> */}
+          </a>
           {connected && (
             <a
               onClick={() => {
@@ -87,6 +124,7 @@ function App() {
           )}
         </div>
       </div>
+      <div id="dev-console" />
     </div>
   );
 }
